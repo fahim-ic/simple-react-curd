@@ -1,69 +1,30 @@
-import React, { Component } from "react";
-import EmployeeList from "./EmplyeeList";
-import EmployeeAddForm from "./EmployeeAddForm";
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+
+import Home from './Home';
+import Employee from './Employee';
+import Contact from './Contact';
 
 class App extends Component {
-    constructor() {
-        super();
-        this.state = {
-            employeeData: {},
-            employeeList: [
-                { "name": "Mario Speedwagon", "age": 54, "id": 1 },
-                { "name": "Petey Cruiser", "age": 23, "id": 2 },
-                { "name": "Anna Sthesia", "age": 68, "id": 3 },
-                { "name": "Paul Molive", "age": 10, "id": 4 },
-                { "name": "Anna Mull", "age": 85, "id": 5 }
-            ]
-        }
-        this.idCount = this.state.employeeList.length
-        this.addEditEmployee = this.addEditEmployee.bind(this)
-        this.updatedEmployee = this.updatedEmployee.bind(this)
-        this.deleteEmployee = this.deleteEmployee.bind(this)
-    }
-
-    deleteEmployee(index) {
-        this.setState(prevState => ({
-            employeeList: prevState.employeeList.filter((_, itemIndex) => itemIndex != index)
-        }));
-    }
-
-    updatedEmployee(index) {
-        this.setState({
-            employeeData: this.state.employeeList[index]
-        });
-    }
-
-    addEditEmployee(data) {
-        if (data.id) {
-            this.setState(prevState => ({
-                employeeList: prevState.employeeList.map(
-                    item => item.id == data.id ? {...item, ...data} : item
-                )
-            }));
-        } else {
-            this.idCount += 1;
-            data["id"] = this.idCount;
-            this.setState({
-                employeeList: [...this.state.employeeList, data],
-            });
-        }
-        this.setState({
-            employeeData: {}
-        });
-    }
-
     render() {
         return (
-            <div className="container home">
-                <EmployeeList
-                    employeeList={this.state.employeeList}
-                    updatedEmployee={ this.updatedEmployee }
-                    deleteEmployee={this.deleteEmployee} />
-                <EmployeeAddForm
-                    addEditEmployee={ this.addEditEmployee }
-                    employeeData={ this.state.employeeData } />
-            </div>
-        )
+            <Router>
+                <div>
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <ul className="navbar-nav mr-auto">
+                            <li><Link to={'/'} className="nav-link"> Home </Link></li>
+                            <li><Link to={'/employee'} className="nav-link">Employee</Link></li>
+                            <li><Link to={'/contact'} className="nav-link">Contact</Link></li>
+                        </ul>
+                    </nav>
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+                        <Route path='/employee' component={Employee} />
+                        <Route path='/contact' component={Contact} />
+                    </Switch>
+                </div>
+            </Router>
+        );
     }
 }
 
